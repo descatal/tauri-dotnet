@@ -15,6 +15,10 @@ jobs:
       matrix:
         os: [ windows-latest, ubuntu-latest ]
 
+    defaults:
+      run:
+        working-directory: ./src/service
+
     steps:
       - uses: actions/checkout@v3
         name: Checkout code
@@ -27,42 +31,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          version: 10
-          run_install: false
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache-dependency-path: ./src/client
-          node-version: 20
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        working-directory: ./src/client
-        run: pnpm install
-
       - name: Install .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
       - name: Restore solution
-        working-directory: ./src/service
         run: dotnet restore
 
       - name: Build solution
-        working-directory: ./src/service
         run: dotnet build --no-restore --configuration Release
 
       - name: Test solution
-        working-directory: ./src/service
         run: dotnet test --no-build --configuration Release --filter "FullyQualifiedName!~AcceptanceTests"
 
       - name: Publish website (win-x64)
-        working-directory: ./src/service
         if: ${{ matrix.os == 'windows-latest' && inputs.build-artifacts == true }}
         run: |
           dotnet publish --configuration Release --runtime win-x64 --self-contained -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish/win-x64
@@ -76,7 +59,6 @@ jobs:
           if-no-files-found: error
 
       - name: Publish website (linux-x64)
-        working-directory: ./src/service
         if: ${{ matrix.os == 'ubuntu-latest' && inputs.build-artifacts == true }}
         run: |
           dotnet publish --configuration Release --runtime linux-x64 --self-contained -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish/linux-x64
