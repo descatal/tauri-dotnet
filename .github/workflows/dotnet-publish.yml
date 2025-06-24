@@ -1,15 +1,6 @@
-name: Build
+name: dotnet-build
 
 on:
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - '.scripts/**'
-      - .gitignore
-      - CODE_OF_CONDUCT.md
-      - LICENSE
-      - README.md
-
   workflow_call:
     inputs:
       build-artifacts:
@@ -97,3 +88,4 @@ jobs:
           name: BoostStudio.Web-linux-x64
           path: ./src/service/publish/linux-x64
           if-no-files-found: error
+        

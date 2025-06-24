@@ -14,7 +14,9 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    uses: ./.github/workflows/build.yml
+  dotnet-publish:
+    uses: ./.github/workflows/dotnet-publish.yml
     with:
       build-artifacts: true
+  tauri-publish:
+    uses: ./.github/workflows/tauri-publish.yml
