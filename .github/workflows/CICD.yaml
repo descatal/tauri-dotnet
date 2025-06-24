@@ -18,6 +18,11 @@ jobs:
     uses: ./.github/workflows/dotnet-publish.yml
     with:
       build-artifacts: true
-  tauri-publish:
-    uses: ./.github/workflows/tauri-publish.yml
+  # tauri-publish:
+  #   uses: ./.github/workflows/tauri-publish.yml
+  #   needs: dotnet-publish
+  test-publish:
+    uses: ./.github/workflows/test-publish.yml
     needs: dotnet-publish
+
+
