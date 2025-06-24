@@ -20,3 +20,4 @@ jobs:
       build-artifacts: true
   tauri-publish:
     uses: ./.github/workflows/tauri-publish.yml
+    needs: dotnet-publish

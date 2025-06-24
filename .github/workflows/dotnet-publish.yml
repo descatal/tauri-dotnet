@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: service-x86_64-pc-windows-msvc
-          path: publish/win-x64
+          path: ./src/service/publish/win-x64
           if-no-files-found: error
 
       - name: Publish website (linux-x64)
@@ -68,6 +68,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: service-x86_64-unknown-linux-gnu
-          path: publish/linux-x64
+          path: ./src/service/publish/linux-x64
           if-no-files-found: error
         
