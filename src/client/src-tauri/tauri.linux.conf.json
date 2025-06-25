@@ -2,6 +2,9 @@
   "bundle": {
     "externalBin": [
       "binaries/linux/service"
-    ]
+    ],
+    "resources": {
+      "binaries/linux/": ""
+    }
   }
 }

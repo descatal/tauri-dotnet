@@ -2,6 +2,9 @@
   "bundle": {
     "externalBin": [
       "binaries/windows/service"
-    ]
+    ],
+    "resources": {
+      "binaries/windows/": ""
+    }
   }
 }
