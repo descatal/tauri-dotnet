@@ -66,14 +66,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: service-x86_64-unknown-linux-gnu
-          path: ./src/client/src-tauri/binaries/linux
+          path: ./src/client/src-tauri/binaries/service
 
       - name: download the dotnet service sidecar (windows)
         if: matrix.platform == 'windows-latest'
         uses: actions/download-artifact@v4
         with:
           name: service-x86_64-pc-windows-msvc
-          path: ./src/client/src-tauri/binaries/windows
+          path: ./src/client/src-tauri/binaries/service
 
       - uses: tauri-apps/tauri-action@v0
         env:

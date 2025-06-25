@@ -48,7 +48,7 @@ jobs:
       - name: Publish website (win-x64)
         if: ${{ matrix.os == 'windows-latest' && inputs.build-artifacts == true }}
         run: |
-          dotnet publish --configuration Release --runtime win-x64 --self-contained -p:AssemblyName=service-x86_64-pc-windows-msvc -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish/win-x64
+          dotnet publish --configuration Release --runtime win-x64 --self-contained -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish/win-x64
 
       - name: Upload website artifacts (win-x64)
         if: ${{ matrix.os == 'windows-latest' && inputs.build-artifacts == true }}
@@ -61,7 +61,7 @@ jobs:
       - name: Publish website (linux-x64)
         if: ${{ matrix.os == 'ubuntu-latest' && inputs.build-artifacts == true }}
         run: |
-          dotnet publish --configuration Release --runtime linux-x64 --self-contained -p:AssemblyName=service-x86_64-unknown-linux-gnu -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish/linux-x64
+          dotnet publish --configuration Release --runtime linux-x64 --self-contained -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish/linux-x64
         
       - name: Upload website artifacts (linux-x64)
         if: ${{ matrix.os == 'ubuntu-latest' && inputs.build-artifacts == true }}

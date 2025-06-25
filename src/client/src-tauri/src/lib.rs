@@ -17,7 +17,7 @@ pub fn run() {
         let app_handle_copy = app.handle().clone();
 
         tauri::async_runtime::spawn(async move {
-            sidecar::spawn(&app_handle_copy).await;
+            sidecar::initialize_service(app_handle_copy);
         });
 
         Ok(())
