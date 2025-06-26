@@ -38,5 +38,15 @@ pub fn run() {
 fn build_log_plugin<R: Runtime>() -> TauriPlugin<R> {
     tauri_plugin_log::Builder::default()
         .level(log::LevelFilter::Debug)
+        .max_file_size(50_000 /* bytes */)
+        .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepSome(5))
+        .target(tauri_plugin_log::Target::new(
+            tauri_plugin_log::TargetKind::LogDir {
+                file_name: Some("logs".to_string()),
+            },
+        ))
+        .target(tauri_plugin_log::Target::new(
+            tauri_plugin_log::TargetKind::Webview,
+        ))
         .build()
 }

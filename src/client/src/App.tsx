@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
+import { attachConsole } from '@tauri-apps/plugin-log';
 import "./App.css";
 
 function App() {
@@ -11,6 +12,23 @@ function App() {
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     setGreetMsg(await invoke("greet", { name }));
   }
+
+  useEffect(() => {
+    const initConsole = async () => {
+      return await attachConsole();
+    };
+
+    let detach: (() => void) | undefined;
+    initConsole().then((unlisten) => {
+      detach = unlisten;
+    });
+
+    return () => {
+      if (detach) {
+        detach();
+      }
+    };
+  }, []);
 
   return (
     <main className="container">
