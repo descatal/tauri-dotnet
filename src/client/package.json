@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "tauri:build": "NO_STRIP=true ARCH=x86_64 pnpm tauri build --verbose"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
