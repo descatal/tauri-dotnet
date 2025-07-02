@@ -63,6 +63,12 @@ jobs:
         run: |
           dotnet publish --configuration Release --runtime linux-x64 --self-contained -p:DebugType=None -p:DebugSymbols=false -p:IncludeNativeLibrariesForSelfExtract=true --output ./publish/linux-x64
         
+      # A workaround for upstream issue: https://github.com/dotnet/runtime/issues/57784
+      # dotnet is requiring an old version of liblttng which is no longer shipped in debian
+      - name: Remove libcoreclrtraceptprovider.so workaround
+        if:  ${{ matrix.os == 'ubuntu-latest' && inputs.build-artifacts == true }}
+        run: rm -f './publish/linux-x64/libcoreclrtraceptprovider.so'
+
       - name: Upload website artifacts (linux-x64)
         if: ${{ matrix.os == 'ubuntu-latest' && inputs.build-artifacts == true }}
         uses: actions/upload-artifact@v4
