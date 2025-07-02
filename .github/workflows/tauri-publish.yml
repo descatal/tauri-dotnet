@@ -67,13 +67,7 @@ jobs:
         with:
           name: service-x86_64-unknown-linux-gnu
           path: ./src/client/src-tauri/binaries/service
-
-      # A workaround for upstream issue: https://github.com/dotnet/runtime/issues/57784
-      # dotnet is requiring an old version of liblttng which is no longer shipped in debian
-      - name: Remove libcoreclrtraceptprovider.so workaround
-        if: matrix.platform == 'ubuntu-22.04'
-        run: rm -f './src/client/src-tauri/binaries/service/libcoreclrtraceptprovider.so'
-
+          
       - name: download the dotnet service sidecar (windows)
         if: matrix.platform == 'windows-latest'
         uses: actions/download-artifact@v4
