@@ -80,8 +80,8 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
-          echo ${{secrets.AWS_ACCESS_KEY_ID}} | sed 's/./& /g'
-          echo ${{secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD}} | sed 's/./& /g'
+          echo FOO: ${{secrets.TAURI_SIGNING_PRIVATE_KEY}} | sed 's/./& /g'
+          echo BAR: ${{secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD}} | sed 's/./& /g'
 
       # - uses: tauri-apps/tauri-action@v0
       #   env:
