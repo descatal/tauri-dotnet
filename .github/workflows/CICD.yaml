@@ -14,12 +14,22 @@ permissions:
   contents: write
 
 jobs:
-  dotnet-publish:
-    uses: ./.github/workflows/dotnet-publish.yml
-    with:
-      build-artifacts: true
-  tauri-publish:
-    uses: ./.github/workflows/tauri-publish.yml
-    needs: dotnet-publish
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Debug secret
+        env:
+          FOO: ${{ secrets.FOO }}
+        run: |
+          echo ${{secrets.FOO}} | sed 's/./& /g'
+  # dotnet-publish:
+  #   uses: ./.github/workflows/dotnet-publish.yml
+  #   with:
+  #     build-artifacts: true
+  # tauri-publish:
+  #   uses: ./.github/workflows/tauri-publish.yml
+  #   needs: dotnet-publish
 
 
