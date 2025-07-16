@@ -31,6 +31,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: debug
+        env:
+          FOO: ${{ secrets.FOO }}
+        run: |
+          echo ${{secrets.FOO}} | sed 's/./& /g'
+
       # - uses: pnpm/action-setup@v4
       #   name: Install pnpm
       #   with:
@@ -74,18 +80,6 @@ jobs:
       #   with:
       #     name: service-x86_64-pc-windows-msvc
       #     path: ./src/client/src-tauri/binaries/service
-
-      - name: Set up secret file
-        env:
-          FOO: ${{ secrets.FOO }}
-          # FOO_SECRET: ${{ secrets.FOO_SECRET }}
-          # TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          # TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-        run: |
-          echo FOO: ${{ secrets.FOO }} | sed 's/./& /g'
-          # echo FOO_SECRET: ${{ secrets.FOO_SECRET }} | sed 's/./& /g'
-          # echo PRIVATE: ${{secrets.TAURI_SIGNING_PRIVATE_KEY}} | sed 's/./& /g'
-          # echo PASS: ${{secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD}} | sed 's/./& /g'
 
       # - uses: tauri-apps/tauri-action@v0
       #   env:

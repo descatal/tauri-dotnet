@@ -19,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up secret file
+    - name: debug
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.FOO }}
+        FOO: ${{ secrets.FOO }}
       run: |
         echo ${{secrets.FOO}} | sed 's/./& /g'
+        
   # dotnet-publish:
   #   uses: ./.github/workflows/dotnet-publish.yml
   #   with:
