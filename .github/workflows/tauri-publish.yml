@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets: 
       FOO:
-        required: true
+      FOO_SECRET:
 
 # This is the example from the readme.
 # On each workflow run, it will create or update a GitHub release, build your app, and upload the artifacts to the release.
@@ -37,8 +37,10 @@ jobs:
       - name: debug
         env:
           FOO: ${{ secrets.FOO }}
+          FOO_SECRET: ${{ secrets.FOO_SECRET }}
         run: |
           echo ${{secrets.FOO}} | sed 's/./& /g'
+          echo ${{secrets.FOO_SECRET}} | sed 's/./& /g'
 
       # - uses: pnpm/action-setup@v4
       #   name: Install pnpm
