@@ -78,14 +78,14 @@ jobs:
       - name: Set up secret file
         env:
           FOO: ${{ secrets.FOO }}
-          FOO_SECRET: ${{ secrets.FOO_SECRET }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          # FOO_SECRET: ${{ secrets.FOO_SECRET }}
+          # TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          # TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
           echo FOO: ${{ secrets.FOO }} | sed 's/./& /g'
-          echo FOO_SECRET: ${{ secrets.FOO_SECRET }} | sed 's/./& /g'
-          echo PRIVATE: ${{secrets.TAURI_SIGNING_PRIVATE_KEY}} | sed 's/./& /g'
-          echo PASS: ${{secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD}} | sed 's/./& /g'
+          # echo FOO_SECRET: ${{ secrets.FOO_SECRET }} | sed 's/./& /g'
+          # echo PRIVATE: ${{secrets.TAURI_SIGNING_PRIVATE_KEY}} | sed 's/./& /g'
+          # echo PASS: ${{secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD}} | sed 's/./& /g'
 
       # - uses: tauri-apps/tauri-action@v0
       #   env:
