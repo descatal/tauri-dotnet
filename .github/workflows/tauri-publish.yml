@@ -3,8 +3,10 @@ name: "tauri-publish"
 on:
   workflow_call:
     secrets: 
-      FOO:
-      FOO_SECRET:
+      TAURI_SIGNING_PRIVATE_KEY:
+        required: true
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD:
+        required: true
 
 # This is the example from the readme.
 # On each workflow run, it will create or update a GitHub release, build your app, and upload the artifacts to the release.
@@ -34,69 +36,61 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: debug
-        env:
-          FOO: ${{ secrets.FOO }}
-          FOO_SECRET: ${{ secrets.FOO_SECRET }}
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: latest
+          run_install: false
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          cache-dependency-path: ./src/client
+          node-version: lts/*
+          cache: 'pnpm'
+
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
         run: |
-          echo ${{secrets.FOO}} | sed 's/./& /g'
-          echo ${{secrets.FOO_SECRET}} | sed 's/./& /g'
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+        # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
+        # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
 
-      # - uses: pnpm/action-setup@v4
-      #   name: Install pnpm
-      #   with:
-      #     version: latest
-      #     run_install: false
+      - name: install frontend dependencies
+        run: pnpm install # change this to npm, pnpm or bun depending on which one you use.
 
-      # - name: setup node
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     cache-dependency-path: ./src/client
-      #     node-version: lts/*
-      #     cache: 'pnpm'
-
-      # - name: install Rust stable
-      #   uses: dtolnay/rust-toolchain@stable
-      #   with:
-      #     # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
-      #     targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
-
-      # - name: install dependencies (ubuntu only)
-      #   if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-      #   # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
-      #   # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
-
-      # - name: install frontend dependencies
-      #   run: pnpm install # change this to npm, pnpm or bun depending on which one you use.
-
-      # - name: download the dotnet service sidecar (linux)
-      #   if: matrix.platform == 'ubuntu-22.04'
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: service-x86_64-unknown-linux-gnu
-      #     path: ./src/client/src-tauri/binaries/service
+      - name: download the dotnet service sidecar (linux)
+        if: matrix.platform == 'ubuntu-22.04'
+        uses: actions/download-artifact@v4
+        with:
+          name: service-x86_64-unknown-linux-gnu
+          path: ./src/client/src-tauri/binaries/service
           
-      # - name: download the dotnet service sidecar (windows)
-      #   if: matrix.platform == 'windows-latest'
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: service-x86_64-pc-windows-msvc
-      #     path: ./src/client/src-tauri/binaries/service
+      - name: download the dotnet service sidecar (windows)
+        if: matrix.platform == 'windows-latest'
+        uses: actions/download-artifact@v4
+        with:
+          name: service-x86_64-pc-windows-msvc
+          path: ./src/client/src-tauri/binaries/service
 
-      # - uses: tauri-apps/tauri-action@v0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-      #     TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-      #     NO_STRIP: true
-      #   with:
-      #     tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-      #     releaseName: "App v__VERSION__"
-      #     releaseBody: "See the assets to download this version and install."
-      #     releaseDraft: true
-      #     prerelease: false
-      #     includeUpdaterJson: true
-      #     args: ${{ matrix.args }}
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          NO_STRIP: true
+        with:
+          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
+          releaseName: "App v__VERSION__"
+          releaseBody: "See the assets to download this version and install."
+          releaseDraft: true
+          prerelease: false
+          includeUpdaterJson: true
+          args: ${{ matrix.args }}

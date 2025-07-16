@@ -13,27 +13,14 @@ permissions:
   id-token: write
   contents: write
 
-jobs:
-  debug:
-    name: Debug
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: debug
-      env:
-        FOO: ${{ secrets.FOO }}
-      run: |
-        echo ${{secrets.FOO}} | sed 's/./& /g'
-        
-  # dotnet-publish:
-  #   uses: ./.github/workflows/dotnet-publish.yml
-  #   with:
-  #     build-artifacts: true
+jobs: 
+  dotnet-publish:
+    uses: ./.github/workflows/dotnet-publish.yml
+    with:
+      build-artifacts: true
   tauri-publish:
     uses: ./.github/workflows/tauri-publish.yml
     secrets: inherit
-    # needs: dotnet-publish
+    needs: dotnet-publish
 
 
