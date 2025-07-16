@@ -33,7 +33,8 @@ jobs:
   #     build-artifacts: true
   tauri-publish:
     uses: ./.github/workflows/tauri-publish.yml
-    secrets: inherit
+    secrets:
+      FOO: ${{ secrets.FOO }}
     # needs: dotnet-publish
 
 

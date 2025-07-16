@@ -2,6 +2,8 @@ name: "tauri-publish"
 
 on:
   workflow_call:
+    secrets: 
+      FOO: ${{ secrets.FOO }}
 
 # This is the example from the readme.
 # On each workflow run, it will create or update a GitHub release, build your app, and upload the artifacts to the release.
